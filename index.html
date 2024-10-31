@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Losowanie pytań i odpowiedzi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0; /* Usunięcie domyślnych marginesów */
+        }
+        h1 {
+            color: #007BFF;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        #question {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffffff;
+        }
+        #userAnswer {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #555;
+            width: 800px; /* Szerokość pola tekstowego */
+            height: 100px; /* Wysokość pola tekstowego */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none; /* Wyłączenie możliwości zmiany rozmiaru */
+            display: none; /* Ukrycie pola na początku */
+        }
+        #correctAnswer {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #ffffff;
+            display: none;
+        }
+        footer {
+            position: absolute;
+            bottom: 10px; /* Odległość od dolnej krawędzi */
+            text-align: center;
+            width: 100%; /* Szerokość stopki */
+            font-size: 16px;
+            color: #555;
+        }
+                #secondText {
+            display: none; /* Ukrywa drugi napis na początku */
+            margin-top: 10px;
+            font-size: 18px;
+            color: blue;
+        }
+        #clickableText {
+            cursor: pointer; /* Zmienia kursor na wskaźnik */
+            color: green;
+            font-weight: bold;
+        }
+        body {
+            position: relative;
+            height: 100vh; /* Ustawia wysokość strony na 100% widoku */
+            margin: 0; /* Usuwa domyślne marginesy */
+        }
+        .link {
+            position: absolute;
+            bottom: 25px; /* Odległość od dołu */
+            left: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+    </style>
+</head>
+<body style="background-color: rgb(37, 37, 37);">
+    <a class="link" target="_blank" href="message.html">Wszystkie pytania i odpowiedzi</a>
+
+    <h1>Losowanie pytań i odpowiedzi</h1>
+    
+    <button class="button" onclick="drawQuestion()">Losuj pytanie</button>
+
+    <div id="question">Wylosowane pytanie pojawi się tutaj</div>
+    <textarea id="userAnswer" placeholder="Wpisz swoją odpowiedź..."></textarea>
+    <div id="correctAnswer">Odpowiedź: </div>
+
+    <script>
+        const questionsAndAnswers = [
+    { question: "Co to jest DNS i jaka jest jego podstawowa funkcja?", answer: "DNS to system tłumaczenia nazw domen na adresy IP." },
+    { question: "Jakie są różnice między rekordami A, AAAA, CNAME, MX?", answer: "Rekord A mapuje nazwę na adres IPv4, AAAA na adres IPv6, CNAME na alias, a MX na serwer pocztowy." },
+    { question: "Co to jest strefa DNS?", answer: "Strefa DNS to część bazy danych DNS, która zawiera informacje o domenie i jej rekordach." },
+    { question: "Jak działa proces rozwiązywania nazw w DNS?", answer: "Proces rozwiązywania nazw w DNS polega na wysyłaniu zapytań przez serwery DNS w celu uzyskania odpowiednich adresów IP." },
+    { question: "Co to jest delegacja strefy w DNS?", answer: "Delegacja strefy to proces przypisywania odpowiedzialności za część przestrzeni nazw DNS innemu serwerowi DNS." },
+    { question: "Jakie są zalety używania serwerów DNS lokalnych?", answer: "Serwery DNS lokalne poprawiają wydajność i bezpieczeństwo oraz zmniejszają ruch w sieci." },
+    { question: "Co to jest DNS caching?", answer: "DNS caching to przechowywanie wyników zapytań DNS, co przyspiesza proces rozwiązywania nazw." },
+    { question: "Jak skonfigurować serwer DNS na systemie Windows Server?", answer: "Aby skonfigurować serwer DNS, należy zainstalować rolę serwera DNS i skonfigurować strefy oraz rekordy." },
+    { question: "Jakie są najpopularniejsze narzędzia do testowania DNS?", answer: "Najpopularniejsze narzędzia do testowania DNS to nslookup, dig i ping." },
+    { question: "Co to jest TTL (Time to Live) w kontekście DNS?", answer: "TTL określa czas, przez jaki rekord DNS może być przechowywany w pamięci podręcznej." },
+    { question: "Co to jest IIS i do czego służy?", answer: "IIS to serwer internetowy firmy Microsoft, który służy do hostowania aplikacji i stron internetowych." },
+    { question: "Jakie są podstawowe różnice między IIS 7 a IIS 10?", answer: "IIS 10 wprowadza nowe funkcje, takie jak obsługa HTTP/2 i lepsza integracja z Windows 10." },
+    { question: "Jak dodać nową stronę internetową w IIS?", answer: "Nową stronę internetową w IIS można dodać, korzystając z kreatora 'Dodaj witrynę' w Menedżerze IIS." },
+    { question: "Co to jest aplikacja w IIS?", answer: "Aplikacja w IIS to zestaw plików i zasobów, które są hostowane w ramach witryny internetowej." },
+    { question: "Jak skonfigurować SSL na stronie w IIS?", answer: "SSL można skonfigurować w IIS, dodając certyfikat SSL do witryny w ustawieniach zabezpieczeń." },
+    { question: "Co to jest mechanizm uwierzytelniania w IIS?", answer: "Mechanizm uwierzytelniania w IIS to sposób weryfikacji tożsamości użytkowników uzyskujących dostęp do zasobów." },
+    { question: "Jak monitorować wydajność serwera IIS?", answer: "Wydajność serwera IIS można monitorować za pomocą narzędzi takich jak Performance Monitor i IIS Manager." },
+    { question: "Co to jest HTTP Redirect w IIS?", answer: "HTTP Redirect w IIS to funkcja, która umożliwia automatyczne przekierowywanie użytkowników z jednego adresu URL na inny." },
+    { question: "Jak skonfigurować wirtualny katalog w IIS?", answer: "Wirtualny katalog w IIS można skonfigurować, dodając nowy katalog w ustawieniach witryny i wskazując odpowiednią lokalizację." },
+    { question: "Jakie są najczęstsze błędy w IIS i jak je naprawić?", answer: "Najczęstsze błędy w IIS to problemy z konfiguracją aplikacji i brak uprawnień do folderów, które można naprawić, dostosowując ustawienia." },
+    { question: "Co to jest Active Directory?", answer: "Active Directory to usługa katalogowa Microsoftu, która umożliwia zarządzanie użytkownikami i zasobami w sieci." },
+    { question: "Jakie są główne komponenty Active Directory?", answer: "Główne komponenty Active Directory to kontrolery domeny, usługi katalogowe, i polityki grupowe (GPO)." },
+    { question: "Jakie są różnice między domeną a lasem w Active Directory?", answer: "Domena to jednostka organizacyjna w Active Directory, podczas gdy las to zbiór wielu domen, które współdzielą schemat i globalny katalog." },
+    { question: "Co to jest kontroler domeny?", answer: "Kontroler domeny to serwer, który zarządza bezpieczeństwem, autoryzacją i uwierzytelnianiem w domenie Active Directory." },
+    { question: "Jakie są typy obiektów w Active Directory?", answer: "Typy obiektów w Active Directory obejmują użytkowników, komputery, grupy, jednostki organizacyjne (OU) i inne zasoby." },
+    { question: "Jak działa replikacja w Active Directory?", answer: "Replikacja w Active Directory synchronizuje dane między kontrolerami domeny, zapewniając spójność informacji." },
+    { question: "Co to jest GPO (Group Policy Object)?", answer: "GPO to zbiór ustawień, które kontrolują konfigurację użytkowników i komputerów w Active Directory." },
+    { question: "Jak dodać nowego użytkownika do Active Directory?", answer: "Nowego użytkownika można dodać do Active Directory, korzystając z narzędzia Active Directory Users and Computers." },
+    { question: "Jakie są metody przywracania Active Directory?", answer: "Metody przywracania Active Directory obejmują przywracanie z kopii zapasowej oraz użycie narzędzia Active Directory Recovery." },
+    { question: "Co to jest OU (Organizational Unit) i jakie ma zastosowanie?", answer: "OU to jednostka organizacyjna w Active Directory, która służy do grupowania obiektów w celu ułatwienia zarządzania." },
+    { question: "Jakie są podstawowe parametry konfiguracji karty sieciowej?", answer: "Podstawowe parametry konfiguracji karty sieciowej to adres IP, maska podsieci, brama domyślna i serwery DNS." },
+    { question: "Co to jest DHCP i jak działa?", answer: "DHCP (Dynamic Host Configuration Protocol) to protokół, który automatycznie przypisuje adresy IP urządzeniom w sieci." },
+    { question: "Jak skonfigurować statyczny adres IP na karcie sieciowej?", answer: "Aby skonfigurować statyczny adres IP, należy przejść do ustawień karty sieciowej i wprowadzić adres IP oraz maskę podsieci." },
+    { question: "Co to jest VLAN i jakie ma zastosowanie?", answer: "VLAN (Virtual Local Area Network) to technologia, która pozwala na podział sieci na logiczne segmenty w celu zwiększenia bezpieczeństwa i efektywności." },
+    { question: "Jakie są różnice między IPv4 a IPv6?", answer: "IPv4 używa 32-bitowych adresów, podczas gdy IPv6 używa 128-bitowych, co zwiększa liczbę dostępnych adresów." },
+    { question: "Co to jest maska podsieci?", answer: "Maska podsieci to wartość, która określa, która część adresu IP odnosi się do sieci, a która do hosta." },
+    { question: "Jakie są podstawowe narzędzia do diagnostyki sieci?", answer: "Podstawowe narzędzia do diagnostyki sieci to ping, tracert, nslookup i Wireshark." },
+    { question: "Jak skonfigurować połączenie VPN?", answer: "Połączenie VPN można skonfigurować, używając odpowiedniego oprogramowania klienckiego i konfigurując ustawienia serwera VPN." },
+    { question: "Co to jest NAT (Network Address Translation)?", answer: "NAT to technologia, która umożliwia mapowanie adresów IP wewnętrznych na adresy IP zewnętrzne w celu ochrony prywatności." },
+    { question: "Jak działa routing w sieci komputerowej?", answer: "Routing polega na przesyłaniu pakietów danych między różnymi sieciami za pomocą routerów." },
+    { question: "Co to jest podsieć?", answer: "Podsieć to wydzielona część sieci, która jest używana do organizowania i zarządzania ruchem danych." },
+    { question: "Jak obliczyć adresy podsieci w IPv4?", answer: "Adresy podsieci w IPv4 oblicza się, stosując maskę podsieci do adresu IP, aby wyznaczyć część sieci i część hosta." },
+    { question: "Co to jest CIDR (Classless Inter-Domain Routing)?", answer: "CIDR to metoda alokacji adresów IP, która pozwala na elastyczne przydzielanie adresów i efektywne wykorzystanie przestrzeni adresowej." },
+    { question: "Jakie są główne różnice między siecią lokalną (LAN) a siecią rozległą (WAN)?", answer: "LAN to sieć ograniczona do małego obszaru, podczas gdy WAN łączy długodystansowe sieci w różnych lokalizacjach." },
+    { question: "Jakie są zalety używania podsieci?", answer: "Zalety używania podsieci to lepsza organizacja ruchu sieciowego, zwiększone bezpieczeństwo oraz efektywne zarządzanie adresami IP." },
+    { question: "Co to jest adres broadcast w sieci?", answer: "Adres broadcast to adres, który pozwala na wysyłanie danych do wszystkich urządzeń w danej podsieci." },
+    { question: "Jakie są typowe metody segmentacji sieci?", answer: "Typowe metody segmentacji sieci to VLAN, podsieci oraz użycie routerów do oddzielania różnych segmentów." },
+    { question: "Jak działa protokół ARP (Address Resolution Protocol)?", answer: "Protokół ARP mapuje adresy IP na fizyczne adresy MAC w sieci lokalnej, umożliwiając komunikację między urządzeniami." },
+    { question: "Co to jest sieć punkt-punkt?", answer: "Sieć punkt-punkt to bezpośrednie połączenie między dwoma urządzeniami bez pośrednictwa innych urządzeń." },
+    { question: "Jakie są standardy dotyczące adresacji IP?", answer: "Standardy dotyczące adresacji IP obejmują IPv4, IPv6 oraz zasady przydzielania adresów przez IANA i regionalne rejestry." },
+    { question: "Jak skonfigurować serwer DNS w Windows Server 2019?", answer: "Serwer DNS w Windows Server 2019 można skonfigurować, używając Menedżera serwera i dodając rolę DNS." },
+    { question: "Jak dodać rekord MX do strefy DNS?", answer: "Rekord MX do strefy DNS można dodać w konsoli zarządzania DNS, wskazując adres mail serwera pocztowego." },
+    { question: "Jak rozwiązać problem z niewłaściwym działaniem DNS?", answer: "Aby rozwiązać problem z niewłaściwym działaniem DNS, należy sprawdzić konfigurację serwera DNS oraz upewnić się, że usługa działa." },
+    { question: "Jak zainstalować IIS na systemie Windows Server?", answer: "IIS można zainstalować w Windows Server, używając Menedżera serwera i dodając rolę serwera WWW." },
+    { question: "Jak przenieść stronę internetową z jednego serwera IIS na inny?", answer: "Aby przenieść stronę internetową w IIS, należy skopiować pliki oraz eksportować i importować ustawienia konfiguracji." },
+    { question: "Jak zdiagnozować problem z połączeniem w Active Directory?", answer: "Problem z połączeniem w Active Directory można zdiagnozować, używając narzędzi takich jak dcdiag i repadmin." },
+    { question: "Jak skonfigurować replikację między dwoma kontrolerami domeny?", answer: "Replikację między kontrolerami domeny można skonfigurować, upewniając się, że kontrolery są w tej samej domenie i używając narzędzia Active Directory Sites and Services." },
+    { question: "Jak przywrócić usunięte obiekty z Active Directory?", answer: "Usunięte obiekty w Active Directory można przywrócić, korzystając z funkcji 'Deleted Objects' w Windows Server." },
+    { question: "Jak skonfigurować polityki grupowe dla użytkowników w Active Directory?", answer: "Polityki grupowe można skonfigurować, tworząc lub edytując GPO w konsoli zarządzania politykami grupowymi." },
+    { question: "Jak przeprowadzić migrację Active Directory do nowego serwera?", answer: "Migrację Active Directory można przeprowadzić, używając narzędzia ADMT oraz zapewniając odpowiednie połączenie między serwerami." },
+    { question: "Jak działa protokół DNSSEC?", answer: "DNSSEC dodaje warstwę bezpieczeństwa do DNS, umożliwiając weryfikację autentyczności odpowiedzi DNS przez podpisy cyfrowe." },
+    { question: "Co to jest dynamiczne DNS (DDNS)?", answer: "Dynamiczne DNS (DDNS) umożliwia automatyczne aktualizowanie rekordów DNS w przypadku zmiany adresu IP." },
+    { question: "Jakie są najlepsze praktyki zabezpieczania serwera DNS?", answer: "Najlepsze praktyki zabezpieczania serwera DNS obejmują użycie DNSSEC, ograniczenie dostępu do serwera oraz regularne aktualizacje." },
+    { question: "Jak skonfigurować zdalne zarządzanie w IIS?", answer: "Zdalne zarządzanie w IIS można skonfigurować, włączając odpowiednie opcje w ustawieniach menedżera serwera i konfigurując zaporę." },
+    { question: "Co to jest Application Pool w IIS i jak go skonfigurować?", answer: "Application Pool to izolowana jednostka w IIS, która uruchamia aplikacje webowe; można go skonfigurować w Menedżerze IIS." },
+    { question: "Jakie są najczęstsze błędy konfiguracji Active Directory?", answer: "Najczęstsze błędy konfiguracji Active Directory obejmują problemy z replikacją, niepoprawne DNS oraz niewłaściwe ustawienia GPO." },
+    { question: "Jakie są różnice między AD FS a Azure AD?", answer: "AD FS to lokalne rozwiązanie do zarządzania tożsamościami, podczas gdy Azure AD jest chmurowym systemem tożsamości i zarządzania dostępem." },
+    { question: "Co to jest Kerberos i jak działa w Active Directory?", answer: "Kerberos to protokół uwierzytelniania używany w Active Directory, który umożliwia bezpieczne uwierzytelnianie użytkowników i usług." },
+    { question: "Jak zabezpieczyć połączenia zdalne do serwera Active Directory?", answer: "Połączenia zdalne do serwera Active Directory można zabezpieczyć, używając protokołów VPN oraz certyfikatów SSL." },
+    { question: "Jak skonfigurować kontroler domeny w trybie RODC (Read-Only Domain Controller)?", answer: "Kontroler domeny w trybie RODC można skonfigurować, instalując go na serwerze, który będzie działał jako RODC w AD." },
+    { question: "Jak rozwiązać problem z 'DNS Server Not Responding'?", answer: "Problem z 'DNS Server Not Responding' można rozwiązać, sprawdzając ustawienia DNS, restartując serwer oraz sprawdzając połączenia sieciowe." },
+    { question: "Co zrobić, gdy IIS nie odpowiada na żądania HTTP?", answer: "W przypadku braku odpowiedzi IIS na żądania HTTP, należy sprawdzić usługi IIS, konfigurację zapory oraz logi serwera." },
+    { question: "Jak zdiagnozować problem z replikacją w Active Directory?", answer: "Diagnozowanie problemów z replikacją w Active Directory można przeprowadzić za pomocą narzędzi dcdiag i repadmin." },
+    { question: "Jak odzyskać hasło administratora Active Directory?", answer: "Hasło administratora Active Directory można odzyskać, używając trybu awaryjnego z wiersza poleceń lub poprzez reset hasła." },
+    { question: "Jak przywrócić konfigurację karty sieciowej do ustawień fabrycznych?", answer: "Konfigurację karty sieciowej można przywrócić do ustawień fabrycznych, resetując ustawienia sieciowe w systemie operacyjnym." },
+    { question: "Jakie są kroki do rozwiązywania problemów z połączeniem VPN?", answer: "Rozwiązywanie problemów z połączeniem VPN obejmuje sprawdzenie konfiguracji, logów oraz ustawień zapory." },
+    { question: "Jak zmienić adres IP karty sieciowej w systemie Windows?", answer: "Adres IP karty sieciowej można zmienić w ustawieniach właściwości połączenia sieciowego w systemie Windows." },
+    { question: "Co zrobić, gdy serwer DNS nie rozwiązuje nazw?", answer: "Gdy serwer DNS nie rozwiązuje nazw, należy sprawdzić ustawienia DNS, połączenia sieciowe oraz stan serwera." },
+    { question: "Jak diagnozować problemy z routingiem?", answer: "Problemy z routingiem można diagnozować, używając poleceń tracert i route oraz sprawdzając tablice routingu." },
+    { question: "Jak zminimalizować ryzyko ataków DDoS na serwer IIS?", answer: "Aby zminimalizować ryzyko ataków DDoS na serwer IIS, można zastosować filtry, zapory oraz monitorować ruch." },
+    { question: "Co to jest DNS w hierarchii internetowej?", answer: "DNS to hierarchiczny system nazw domenowych, który tłumaczy nazwy domenowe na adresy IP w Internecie." },
+    { question: "Jak działa system nazw domenowych?", answer: "System nazw domenowych działa poprzez hierarchiczne przyporządkowanie nazw do adresów IP, umożliwiając łatwe wyszukiwanie zasobów w sieci." },
+    { question: "Jakie są kluczowe zasady dotyczące projektowania Active Directory?", answer: "Kluczowe zasady projektowania Active Directory obejmują planowanie struktury OU, zapewnienie efektywnej replikacji oraz odpowiednie zarządzanie grupami." },
+    { question: "Co to jest sieć mesh i jakie są jej zalety?", answer: "Sieć mesh to topologia sieci, w której każdy węzeł jest połączony z wieloma innymi, co zwiększa niezawodność i wydajność." },
+    { question: "Jakie są różnice w adresacji między IPv4 a IPv6?", answer: "IPv4 używa 32-bitowych adresów, podczas gdy IPv6 używa 128-bitowych adresów, co znacznie zwiększa dostępność adresów." },
+    { question: "Jakie są podstawowe protokoły komunikacyjne w sieciach komputerowych?", answer: "Podstawowe protokoły komunikacyjne to TCP, UDP, HTTP, FTP oraz ICMP." },
+    { question: "Co to jest model OSI i jakie ma zastosowanie?", answer: "Model OSI to teoretyczny model komunikacji w sieciach, który dzieli proces komunikacji na siedem warstw, co ułatwia projektowanie i rozwiązywanie problemów." },
+    { question: "Jakie są różnice między TCP a UDP?", answer: "TCP jest protokołem połączeniowym, który zapewnia niezawodność, podczas gdy UDP jest protokołem bezpołączeniowym, który nie gwarantuje dostarczenia danych." },
+    { question: "Co to jest usługa directory service?", answer: "Usługa directory service to system, który przechowuje informacje o obiektach w sieci i umożliwia ich wyszukiwanie oraz zarządzanie." },
+    { question: "Jakie są różnice między łączeniem przewodowym a bezprzewodowym?", answer: "Łączenie przewodowe zapewnia wyższą stabilność i prędkość, podczas gdy łączenie bezprzewodowe oferuje większą elastyczność i mobilność." },
+    { question: "Jak skonfigurować DNS dla własnej domeny?", answer: "Aby skonfigurować DNS dla własnej domeny, należy zarejestrować domenę, ustawić rekordy DNS w panelu dostawcy oraz skonfigurować serwer DNS." },
+    { question: "Jak stworzyć nową aplikację webową w IIS?", answer: "Nową aplikację webową w IIS można stworzyć, używając Menedżera IIS do dodania aplikacji w odpowiednim wirtualnym katalogu." },
+    { question: "Jak używać PowerShell do zarządzania Active Directory?", answer: "PowerShell można używać do zarządzania Active Directory poprzez polecenia cmdlet, które umożliwiają wykonywanie operacji na obiektach AD." },
+    { question: "Jak zautomatyzować zadania w IIS?", answer: "Zadania w IIS można zautomatyzować, korzystając z PowerShell, skryptów lub harmonogramu zadań Windows." },
+    { question: "Jak zabezpieczyć dane w Active Directory?", answer: "Dane w Active Directory można zabezpieczyć, stosując silne hasła, polityki grupowe oraz regularne audyty bezpieczeństwa." },
+    { question: "Jak skonfigurować serwer DHCP?", answer: "Serwer DHCP można skonfigurować, instalując rolę DHCP na serwerze i definiując zakresy adresów IP do przydzielenia." },
+    { question: "Jak monitorować ruch w sieci lokalnej?", answer: "Ruch w sieci lokalnej można monitorować za pomocą narzędzi do analizy sieci, takich jak Wireshark oraz monitorów ruchu sieciowego." },
+    { question: "Jak wykrywać i eliminować konflikty adresów IP?", answer: "Konflikty adresów IP można wykrywać, monitorując logi zdarzeń i używając narzędzi do skanowania adresów w sieci." },
+    { question: "Jakie są metody testowania wydajności serwera IIS?", answer: "Metody testowania wydajności serwera IIS obejmują testy obciążeniowe, monitorowanie logów oraz użycie narzędzi takich jak Microsoft Web Application Stress Tool." },
+    { question: "Jak zapewnić ciągłość działania usług Active Directory?", answer: "Aby zapewnić ciągłość działania usług Active Directory, należy wdrożyć redundancję, regularnie tworzyć kopie zapasowe oraz monitorować stan systemu." }
+          ];
+
+        let currentQuestion = null;
+
+        function drawQuestion() {
+            const randomIndex = Math.floor(Math.random() * questionsAndAnswers.length);
+            currentQuestion = questionsAndAnswers[randomIndex];
+            document.getElementById("question").innerText = currentQuestion.question;
+            document.getElementById("userAnswer").style.display = "block";
+            document.getElementById("userAnswer").value = '';
+            document.getElementById("correctAnswer").style.display = "none";
+
+            // Clear previous answer
+            document.getElementById("correctAnswer").innerText = "Odpowiedź: ";
+            document.getElementById("userAnswer").focus();
+        }
+
+        document.getElementById("userAnswer").addEventListener("keypress", function(event) {
+            if (event.key === "Enter" && currentQuestion) {
+                const userAnswer = document.getElementById("userAnswer").value;
+                document.getElementById("correctAnswer").innerText = "Odpowiedź: " + currentQuestion.answer;
+                document.getElementById("correctAnswer").style.display = "block";
+            }
+        });
+        function toggleSecondText() {
+            const secondText = document.getElementById("secondText");
+            if (secondText.style.display === "none") {
+                secondText.style.display = "block"; // Wyświetla drugi napis
+            } else {
+                secondText.style.display = "none"; // Ukrywa drugi napis
+            }
+        }
+        
+    </script>
+<footer target="_blank" href="https://www.youtube.com/watch?v=A2lr7C8PKbo" style="color: rgb(231, 229, 77)">Simon Kapata, Ignacy Kizak</footer>
+</body>
+</html>
+
+
+
