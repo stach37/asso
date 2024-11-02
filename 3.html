@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>trzecie 20 pytań</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0; /* Usunięcie domyślnych marginesów */
+        }
+        h1 {
+            color: #007BFF;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        #question {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffffff;
+        }
+        #userAnswer {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #555;
+            width: 50%; /* Szerokość pola tekstowego */
+            height: 100px; /* Wysokość pola tekstowego */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none; /* Wyłączenie możliwości zmiany rozmiaru */
+            display: none; /* Ukrycie pola na początku */
+        }
+        #correctAnswer {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #ffffff;
+            display: none;
+        }
+        footer {
+            position: absolute;
+            bottom: 10px; /* Odległość od dolnej krawędzi */
+            text-align: center;
+            width: 100%; /* Szerokość stopki */
+            font-size: 16px;
+            color: #555;
+        }
+                #secondText {
+            display: none; /* Ukrywa drugi napis na początku */
+            margin-top: 10px;
+            font-size: 18px;
+            color: blue;
+        }
+        #clickableText {
+            cursor: pointer; /* Zmienia kursor na wskaźnik */
+            color: green;
+            font-weight: bold;
+        }
+        body {
+            position: relative;
+            height: 100vh; /* Ustawia wysokość strony na 100% widoku */
+            margin: 0; /* Usuwa domyślne marginesy */
+        }
+        .link {
+            position: absolute;
+            bottom: 25px; /* Odległość od dołu */
+            left: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+        .wszystkie {
+            position: absolute;
+            bottom: 145px; /* Odległość od dołu */
+            right: 25px; /* Odległość od prawej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                       .pierwsze {
+            position: absolute;
+            bottom: 115px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                        .drugie {
+            position: absolute;
+            bottom: 85px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                        .czwarte {
+            position: absolute;
+            bottom: 55px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                        .piąte {
+            position: absolute;
+            bottom: 25px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+    </style>
+</head>
+<body style="background-color: rgb(37, 37, 37);">
+    <a class="link" href="message.html">Wszystkie pytania i odpowiedzi</a>
+    <a class="wszystkie" href="index.html">100 pytań</a>
+    <a class="pierwsze" href="1.html">pierwsze 20 pytań</a>
+    <a class="drugie" href="2.html">drugie 20 pytań</a>
+    <a class="czwarte" href="4.html">czwarte 20 pytań</a>
+    <a class="piąte" href="5.html">piąte 20 pytań</a>
+
+
+    <h1>Losowanie 20 trzecich pytań i odpowiedzi</h1>
+    
+    <button class="button" onclick="drawQuestion()">Losuj pytanie</button>
+
+    <div id="question">Wylosowane pytanie pojawi się tutaj</div>
+    <textarea id="userAnswer" placeholder="Wpisz swoją odpowiedź..."></textarea>
+    <div id="correctAnswer">Odpowiedź: </div>
+
+    <script>
+        const questionsAndAnswers = [
+        { question: "Jak działa routing w sieci komputerowej?", answer: "Routing polega na przesyłaniu pakietów danych między różnymi sieciami za pomocą routerów." },
+    { question: "Co to jest podsieć?", answer: "Podsieć to wydzielona część sieci, która jest używana do organizowania i zarządzania ruchem danych." },
+    { question: "Jak obliczyć adresy podsieci w IPv4?", answer: "Adresy podsieci w IPv4 oblicza się, stosując maskę podsieci do adresu IP, aby wyznaczyć część sieci i część hosta." },
+    { question: "Co to jest CIDR (Classless Inter-Domain Routing)?", answer: "CIDR to metoda alokacji adresów IP, która pozwala na elastyczne przydzielanie adresów i efektywne wykorzystanie przestrzeni adresowej." },
+    { question: "Jakie są główne różnice między siecią lokalną (LAN) a siecią rozległą (WAN)?", answer: "LAN to sieć ograniczona do małego obszaru, podczas gdy WAN łączy długodystansowe sieci w różnych lokalizacjach." },
+    { question: "Jakie są zalety używania podsieci?", answer: "Zalety używania podsieci to lepsza organizacja ruchu sieciowego, zwiększone bezpieczeństwo oraz efektywne zarządzanie adresami IP." },
+    { question: "Co to jest adres broadcast w sieci?", answer: "Adres broadcast to adres, który pozwala na wysyłanie danych do wszystkich urządzeń w danej podsieci." },
+    { question: "Jakie są typowe metody segmentacji sieci?", answer: "Typowe metody segmentacji sieci to VLAN, podsieci oraz użycie routerów do oddzielania różnych segmentów." },
+    { question: "Jak działa protokół ARP (Address Resolution Protocol)?", answer: "Protokół ARP zmienia adresy IP na fizyczne adresy MAC w sieci lokalnej" },
+    { question: "Co to jest sieć punkt-punkt?", answer: "Sieć punkt-punkt to bezpośrednie połączenie między dwoma urządzeniami bez pośrednictwa innych urządzeń." },
+    { question: "Jakie są standardy dotyczące adresacji IP?", answer: "Standardy dotyczące adresacji IP obejmują IPv4, IPv6 oraz zasady przydzielania adresów przez IANA i regionalne rejestry." },
+    { question: "Jak skonfigurować serwer DNS w Windows Server 2019?", answer: "Serwer DNS w Windows Server 2019 można skonfigurować, używając Menedżera serwera i dodając rolę DNS." },
+    { question: "Jak dodać rekord MX do strefy DNS?", answer: "Rekord MX do strefy DNS można dodać w konsoli zarządzania DNS, wskazując adres mail serwera pocztowego." },
+    { question: "Jak rozwiązać problem z niewłaściwym działaniem DNS?", answer: "Aby rozwiązać problem z niewłaściwym działaniem DNS, należy sprawdzić konfigurację serwera DNS oraz upewnić się, że usługa działa." },
+    { question: "Jak zainstalować IIS na systemie Windows Server?", answer: "IIS można zainstalować w Windows Server, używając Menedżera serwera i dodając rolę serwera WWW." },
+    { question: "Jak przenieść stronę internetową z jednego serwera IIS na inny?", answer: "Aby przenieść stronę internetową w IIS, należy skopiować pliki oraz eksportować i importować ustawienia konfiguracji." },
+    { question: "Jak zdiagnozować problem z połączeniem w Active Directory?", answer: "Problem z połączeniem w Active Directory można zdiagnozować, używając narzędzi takich jak dcdiag i repadmin." },
+    { question: "Jak skonfigurować replikację między dwoma kontrolerami domeny?", answer: "Replikację między kontrolerami domeny można skonfigurować, upewniając się, że kontrolery są w tej samej domenie i używając narzędzia Active Directory Sites and Services." },
+    { question: "Jak przywrócić usunięte obiekty z Active Directory?", answer: "Usunięte obiekty w Active Directory można przywrócić, korzystając z funkcji 'Deleted Objects' w Windows Server." },
+    { question: "Jak skonfigurować polityki grupowe dla użytkowników w Active Directory?", answer: "Polityki grupowe można skonfigurować, tworząc lub edytując GPO w konsoli zarządzania politykami grupowymi." },
+          ];
+
+        let currentQuestion = null;
+
+        function drawQuestion() {
+            const randomIndex = Math.floor(Math.random() * questionsAndAnswers.length);
+            currentQuestion = questionsAndAnswers[randomIndex];
+            document.getElementById("question").innerText = currentQuestion.question;
+            document.getElementById("userAnswer").style.display = "block";
+            document.getElementById("userAnswer").value = '';
+            document.getElementById("correctAnswer").style.display = "none";
+
+            // Clear previous answer
+            document.getElementById("correctAnswer").innerText = "Odpowiedź: ";
+            document.getElementById("userAnswer").focus();
+        }
+
+        document.getElementById("userAnswer").addEventListener("keypress", function(event) {
+            if (event.key === "Enter" && currentQuestion) {
+                const userAnswer = document.getElementById("userAnswer").value;
+                document.getElementById("correctAnswer").innerText = "Odpowiedź: " + currentQuestion.answer;
+                document.getElementById("correctAnswer").style.display = "block";
+            }
+        });
+        function toggleSecondText() {
+            const secondText = document.getElementById("secondText");
+            if (secondText.style.display === "none") {
+                secondText.style.display = "block"; // Wyświetla drugi napis
+            } else {
+                secondText.style.display = "none"; // Ukrywa drugi napis
+            }
+        }
+        
+    </script>
+<footer style="color: rgb(231, 229, 77)">Simon Kapata, Ignacy Kizak</footer>
+</body>
+</html>
+
+
+

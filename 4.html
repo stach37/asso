@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>czwarte 20 pytań</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0; /* Usunięcie domyślnych marginesów */
+        }
+        h1 {
+            color: #007BFF;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        #question {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffffff;
+        }
+        #userAnswer {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #555;
+            width: 50%; /* Szerokość pola tekstowego */
+            height: 100px; /* Wysokość pola tekstowego */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none; /* Wyłączenie możliwości zmiany rozmiaru */
+            display: none; /* Ukrycie pola na początku */
+        }
+        #correctAnswer {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #ffffff;
+            display: none;
+        }
+        footer {
+            position: absolute;
+            bottom: 10px; /* Odległość od dolnej krawędzi */
+            text-align: center;
+            width: 100%; /* Szerokość stopki */
+            font-size: 16px;
+            color: #555;
+        }
+                #secondText {
+            display: none; /* Ukrywa drugi napis na początku */
+            margin-top: 10px;
+            font-size: 18px;
+            color: blue;
+        }
+        #clickableText {
+            cursor: pointer; /* Zmienia kursor na wskaźnik */
+            color: green;
+            font-weight: bold;
+        }
+        body {
+            position: relative;
+            height: 100vh; /* Ustawia wysokość strony na 100% widoku */
+            margin: 0; /* Usuwa domyślne marginesy */
+        }
+        .link {
+            position: absolute;
+            bottom: 25px; /* Odległość od dołu */
+            left: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+        .wszystkie {
+            position: absolute;
+            bottom: 145px; /* Odległość od dołu */
+            right: 25px; /* Odległość od prawej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                       .pierwsze {
+            position: absolute;
+            bottom: 115px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                        .drugie {
+            position: absolute;
+            bottom: 85px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                        .trzecie {
+            position: absolute;
+            bottom: 55px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                        .piąte {
+            position: absolute;
+            bottom: 25px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+    </style>
+</head>
+<body style="background-color: rgb(37, 37, 37);">
+    <a class="link" href="message.html">Wszystkie pytania i odpowiedzi</a>
+    <a class="wszystkie" href="index.html">100 pytań</a>
+    <a class="pierwsze" href="1.html">pierwsze 20 pytań</a>
+    <a class="drugie" href="2.html">drugie 20 pytań</a>
+    <a class="trzecie" href="3.html">trzecie 20 pytań</a>
+    <a class="piąte" href="5.html">piąte 20 pytań</a>
+
+
+    <h1>Losowanie 20 czwartych pytań i odpowiedzi</h1>
+    
+    <button class="button" onclick="drawQuestion()">Losuj pytanie</button>
+
+    <div id="question">Wylosowane pytanie pojawi się tutaj</div>
+    <textarea id="userAnswer" placeholder="Wpisz swoją odpowiedź..."></textarea>
+    <div id="correctAnswer">Odpowiedź: </div>
+
+    <script>
+        const questionsAndAnswers = [
+        { question: "Jak przeprowadzić migrację Active Directory do nowego serwera?", answer: "Migrację Active Directory można przeprowadzić, używając narzędzia ADMT (Active Directory Migration Tool) oraz zapewniając odpowiednie połączenie między serwerami." },
+    { question: "Jak działa protokół DNSSEC (Domain Name System Security Extensions)?", answer: "DNSSEC dodaje warstwę bezpieczeństwa do DNS, umożliwiając weryfikację autentyczności odpowiedzi DNS przez podpisy cyfrowe." },
+    { question: "Co to jest dynamiczne DNS (DDNS)?", answer: "Dynamiczne DNS (DDNS) umożliwia automatyczne aktualizowanie rekordów DNS w przypadku zmiany adresu IP." },
+    { question: "Jakie są najlepsze praktyki zabezpieczania serwera DNS?", answer: "Najlepsze praktyki zabezpieczania serwera DNS obejmują użycie DNSSEC, ograniczenie dostępu do serwera oraz regularne aktualizacje." },
+    { question: "Jak skonfigurować zdalne zarządzanie w IIS?", answer: "Zdalne zarządzanie w IIS można skonfigurować, włączając odpowiednie opcje w ustawieniach menedżera serwera i konfigurując zaporę." },
+    { question: "Co to jest Application Pool w IIS i jak go skonfigurować?", answer: "Application Pool to izolowana jednostka w IIS, która uruchamia aplikacje webowe, co umożliwia hostowanie wielu aplikacji internetowych na jednym serwerze w trybie izolacji; można go skonfigurować w Menedżerze IIS." },
+    { question: "Jakie są najczęstsze błędy konfiguracji Active Directory?", answer: "Najczęstsze błędy konfiguracji Active Directory obejmują problemy z replikacją, niepoprawne DNS oraz niewłaściwe ustawienia GPO." },
+    { question: "Jakie są różnice między AD FS a Azure AD?", answer: "AD FS to lokalne rozwiązanie do zarządzania tożsamościami, podczas gdy Azure AD jest chmurowym systemem tożsamości i zarządzania dostępem." },
+    { question: "Co to jest Kerberos i jak działa w Active Directory?", answer: "Kerberos to protokół uwierzytelniania używany w Active Directory, który umożliwia bezpieczne uwierzytelnianie użytkowników i usług." },
+    { question: "Jak zabezpieczyć połączenia zdalne do serwera Active Directory?", answer: "Połączenia zdalne do serwera Active Directory można zabezpieczyć, używając protokołów VPN oraz certyfikatów SSL." },
+    { question: "Jak skonfigurować kontroler domeny w trybie RODC (Read-Only Domain Controller)?", answer: "Kontroler domeny w trybie RODC można skonfigurować, instalując go na serwerze, który będzie działał jako RODC w AD." },
+    { question: "Jak rozwiązać problem z 'DNS Server Not Responding'?", answer: "Problem z 'DNS Server Not Responding' można rozwiązać, sprawdzając ustawienia DNS, restartując serwer oraz sprawdzając połączenia sieciowe." },
+    { question: "Co zrobić, gdy IIS nie odpowiada na żądania HTTP?", answer: "W przypadku braku odpowiedzi IIS na żądania HTTP, należy sprawdzić usługi IIS, konfigurację zapory oraz logi serwera." },
+    { question: "Jak zdiagnozować problem z replikacją w Active Directory?", answer: "Diagnozowanie problemów z replikacją w Active Directory można przeprowadzić za pomocą narzędzi dcdiag i repadmin." },
+    { question: "Jak odzyskać hasło administratora Active Directory?", answer: "Hasło administratora Active Directory można odzyskać, używając trybu awaryjnego z wiersza poleceń lub poprzez reset hasła." },
+    { question: "Jak przywrócić konfigurację karty sieciowej do ustawień fabrycznych?", answer: "Konfigurację karty sieciowej można przywrócić do ustawień fabrycznych, resetując ustawienia sieciowe w systemie operacyjnym." },
+    { question: "Jakie są kroki do rozwiązywania problemów z połączeniem VPN?", answer: "Rozwiązywanie problemów z połączeniem VPN obejmuje sprawdzenie konfiguracji, logów oraz ustawień zapory." },
+    { question: "Jak zmienić adres IP karty sieciowej w systemie Windows?", answer: "Adres IP karty sieciowej można zmienić w ustawieniach właściwości połączenia sieciowego w systemie Windows." },
+    { question: "Co zrobić, gdy serwer DNS nie rozwiązuje nazw?", answer: "Gdy serwer DNS nie rozwiązuje nazw, należy sprawdzić ustawienia DNS, połączenia sieciowe oraz stan serwera." },
+    { question: "Jak diagnozować problemy z routingiem?", answer: "Problemy z routingiem można diagnozować, używając poleceń tracert i route oraz sprawdzając tablice routingu." },
+          ];
+
+        let currentQuestion = null;
+
+        function drawQuestion() {
+            const randomIndex = Math.floor(Math.random() * questionsAndAnswers.length);
+            currentQuestion = questionsAndAnswers[randomIndex];
+            document.getElementById("question").innerText = currentQuestion.question;
+            document.getElementById("userAnswer").style.display = "block";
+            document.getElementById("userAnswer").value = '';
+            document.getElementById("correctAnswer").style.display = "none";
+
+            // Clear previous answer
+            document.getElementById("correctAnswer").innerText = "Odpowiedź: ";
+            document.getElementById("userAnswer").focus();
+        }
+
+        document.getElementById("userAnswer").addEventListener("keypress", function(event) {
+            if (event.key === "Enter" && currentQuestion) {
+                const userAnswer = document.getElementById("userAnswer").value;
+                document.getElementById("correctAnswer").innerText = "Odpowiedź: " + currentQuestion.answer;
+                document.getElementById("correctAnswer").style.display = "block";
+            }
+        });
+        function toggleSecondText() {
+            const secondText = document.getElementById("secondText");
+            if (secondText.style.display === "none") {
+                secondText.style.display = "block"; // Wyświetla drugi napis
+            } else {
+                secondText.style.display = "none"; // Ukrywa drugi napis
+            }
+        }
+        
+    </script>
+<footer style="color: rgb(231, 229, 77)">Simon Kapata, Ignacy Kizak</footer>
+</body>
+</html>
+
+
+

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>drugie 20 pytań</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            margin: 0; /* Usunięcie domyślnych marginesów */
+        }
+        h1 {
+            color: #007BFF;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+        #question {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #ffffff;
+        }
+        #userAnswer {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #555;
+            width: 50%; /* Szerokość pola tekstowego */
+            height: 100px; /* Wysokość pola tekstowego */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none; /* Wyłączenie możliwości zmiany rozmiaru */
+            display: none; /* Ukrycie pola na początku */
+        }
+        #correctAnswer {
+            margin-top: 10px;
+            font-size: 18px;
+            color: #ffffff;
+            display: none;
+        }
+        footer {
+            position: absolute;
+            bottom: 10px; /* Odległość od dolnej krawędzi */
+            text-align: center;
+            width: 100%; /* Szerokość stopki */
+            font-size: 16px;
+            color: #555;
+        }
+                #secondText {
+            display: none; /* Ukrywa drugi napis na początku */
+            margin-top: 10px;
+            font-size: 18px;
+            color: blue;
+        }
+        #clickableText {
+            cursor: pointer; /* Zmienia kursor na wskaźnik */
+            color: green;
+            font-weight: bold;
+        }
+        body {
+            position: relative;
+            height: 100vh; /* Ustawia wysokość strony na 100% widoku */
+            margin: 0; /* Usuwa domyślne marginesy */
+        }
+        .link {
+            position: absolute;
+            bottom: 25px; /* Odległość od dołu */
+            left: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+        .wszystkie {
+            position: absolute;
+            bottom: 145px; /* Odległość od dołu */
+            right: 25px; /* Odległość od prawej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                       .pierwsze {
+            position: absolute;
+            bottom: 115px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                        .trzecie {
+            position: absolute;
+            bottom: 85px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                        .czwarte {
+            position: absolute;
+            bottom: 55px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+                        .piąte {
+            position: absolute;
+            bottom: 25px; /* Odległość od dołu */
+            right: 25px; /* Odległość od lewej */
+            color: rgb(255, 255, 255); /* Kolor tekstu */
+        }
+    </style>
+</head>
+<body style="background-color: rgb(37, 37, 37);">
+    <a class="link" href="message.html">Wszystkie pytania i odpowiedzi</a>
+    <a class="wszystkie" href="index.html">100 pytań</a>
+    <a class="pierwsze" href="1.html">pierwsze 20 pytań</a>
+    <a class="trzecie" href="3.html">trzecie 20 pytań</a>
+    <a class="czwarte" href="4.html">czwarte 20 pytań</a>
+    <a class="piąte" href="5.html">piąte 20 pytań</a>
+
+
+    <h1>Losowanie 20 drugich pytań i odpowiedzi</h1>
+    
+    <button class="button" onclick="drawQuestion()">Losuj pytanie</button>
+
+    <div id="question">Wylosowane pytanie pojawi się tutaj</div>
+    <textarea id="userAnswer" placeholder="Wpisz swoją odpowiedź..."></textarea>
+    <div id="correctAnswer">Odpowiedź: </div>
+
+    <script>
+        const questionsAndAnswers = [
+        { question: "Jakie są najczęstsze błędy w IIS i jak je naprawić?", answer: "Błąd 500 – błąd w kodzie lub konfiguracji aplikacji, naprawa po przez sprawdzenie logów IIS<br>  Błąd 403 – Odmowa dostępu/niewystarczające uprawnienia, naprawa to zmienienie uprawnień do katalogu i plików<br>  Błąd 404 – Nie znaleziono plików, naprawa to zweryfikowanie, czy plik lub strona istnieje, i sprawdzenie reguły URL Rewrite w IIS" },
+    { question: "Co to jest Active Directory?", answer: "Active Directory to usługa katalogowa Microsoftu, która umożliwia zarządzanie użytkownikami i zasobami w sieci." },
+    { question: "Jakie są główne komponenty Active Directory?", answer: "Główne komponenty Active Directory to kontrolery domeny, usługi katalogowe, i polityki grupowe (GPO)." },
+    { question: "Jakie są różnice między domeną a lasem w Active Directory?", answer: "Domena to jednostka organizacyjna w Active Directory, podczas gdy las to zbiór wielu domen, które współdzielą schemat i globalny katalog." },
+    { question: "Co to jest kontroler domeny?", answer: "Kontroler domeny to serwer, który zarządza bezpieczeństwem, autoryzacją i uwierzytelnianiem w domenie Active Directory." },
+    { question: "Jakie są typy obiektów w Active Directory?", answer: "Typy obiektów w Active Directory obejmują użytkowników, komputery, grupy, jednostki organizacyjne (OU) i inne zasoby." },
+    { question: "Jak działa replikacja w Active Directory?", answer: "Replikacja w Active Directory synchronizuje dane między kontrolerami domeny, zapewniając spójność informacji." },
+    { question: "Co to jest GPO (Group Policy Object)?", answer: "GPO to zbiór ustawień, które kontrolują konfigurację użytkowników i komputerów w Active Directory." },
+    { question: "Jak dodać nowego użytkownika do Active Directory?", answer: "Nowego użytkownika można dodać do Active Directory, korzystając z narzędzia Active Directory Users and Computers." },
+    { question: "Jakie są metody przywracania Active Directory?", answer: "Metody przywracania Active Directory obejmują przywracanie z kopii zapasowej oraz użycie narzędzia Active Directory Recovery." },
+    { question: "Co to jest OU (Organizational Unit) i jakie ma zastosowanie?", answer: "OU to jednostka organizacyjna w Active Directory, która służy do grupowania obiektów w celu ułatwienia zarządzania." },
+    { question: "Jakie są podstawowe parametry konfiguracji karty sieciowej?", answer: "adres IP, maska podsieci, brama domyślna i serwery DNS." },
+    { question: "Co to jest DHCP i jak działa?", answer: "DHCP (Dynamic Host Configuration Protocol) to protokół, który automatycznie przypisuje adresy IP urządzeniom w sieci." },
+    { question: "Jak skonfigurować statyczny adres IP na karcie sieciowej?", answer: "Aby skonfigurować statyczny adres IP, należy przejść do ustawień karty sieciowej i wprowadzić adres IP oraz maskę podsieci." },
+    { question: "Co to jest VLAN i jakie ma zastosowanie?", answer: "VLAN (Virtual Local Area Network) to technologia, która pozwala na podział sieci na logiczne segmenty w celu zwiększenia bezpieczeństwa i efektywności." },
+    { question: "Jakie są różnice między IPv4 a IPv6?", answer: "IPv4 używa 32-bitowych adresów, podczas gdy IPv6 używa 128-bitowych, co zwiększa liczbę dostępnych adresów." },
+    { question: "Co to jest maska podsieci?", answer: "Maska podsieci to wartość, która określa, która część adresu IP odnosi się do sieci, a która do hosta." },
+    { question: "Jakie są podstawowe narzędzia do diagnostyki sieci?", answer: "Podstawowe narzędzia do diagnostyki sieci to ping, tracert, nslookup i Wireshark." },
+    { question: "Jak skonfigurować połączenie VPN?", answer: "Połączenie VPN można skonfigurować, używając odpowiedniego oprogramowania klienckiego i konfigurując ustawienia serwera VPN." },
+    { question: "Co to jest NAT (Network Address Translation)?", answer: "NAT to technologia, która umożliwia mapowanie adresów IP wewnętrznych na adresy IP zewnętrzne w celu ochrony prywatności." },
+          ];
+
+        let currentQuestion = null;
+
+        function drawQuestion() {
+            const randomIndex = Math.floor(Math.random() * questionsAndAnswers.length);
+            currentQuestion = questionsAndAnswers[randomIndex];
+            document.getElementById("question").innerText = currentQuestion.question;
+            document.getElementById("userAnswer").style.display = "block";
+            document.getElementById("userAnswer").value = '';
+            document.getElementById("correctAnswer").style.display = "none";
+
+            // Clear previous answer
+            document.getElementById("correctAnswer").innerText = "Odpowiedź: ";
+            document.getElementById("userAnswer").focus();
+        }
+
+        document.getElementById("userAnswer").addEventListener("keypress", function(event) {
+            if (event.key === "Enter" && currentQuestion) {
+                const userAnswer = document.getElementById("userAnswer").value;
+                document.getElementById("correctAnswer").innerText = "Odpowiedź: " + currentQuestion.answer;
+                document.getElementById("correctAnswer").style.display = "block";
+            }
+        });
+        function toggleSecondText() {
+            const secondText = document.getElementById("secondText");
+            if (secondText.style.display === "none") {
+                secondText.style.display = "block"; // Wyświetla drugi napis
+            } else {
+                secondText.style.display = "none"; // Ukrywa drugi napis
+            }
+        }
+        
+    </script>
+<footer style="color: rgb(231, 229, 77)">Simon Kapata, Ignacy Kizak</footer>
+</body>
+</html>
+
+
+
